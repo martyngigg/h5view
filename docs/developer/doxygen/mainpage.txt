@@ -1,0 +1,4 @@
+/*!
+\mainpage
+Description of project for front page of generated pages
+*/
