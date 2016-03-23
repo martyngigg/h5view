@@ -9,5 +9,6 @@
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND
     CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.2)
   message(FATAL_ERROR "GCC 4.2 or later is required.")
-  include ("Compilers/GNUConfig.cmake")
+else ()
+  include (Compilers/GNUConfig)
 endif ()
