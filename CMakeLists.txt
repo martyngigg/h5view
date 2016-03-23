@@ -64,7 +64,7 @@ set (BUILD_SHARED_LIBS ON)
 # ------------------------------------------------------------------------------
 # Static checks
 # ------------------------------------------------------------------------------
-add_subdirectory (devtools/static-analysis-cppcheck)
+add_subdirectory (devtools/static-analysis/cppcheck)
 
 # ------------------------------------------------------------------------------
 # Documentation
