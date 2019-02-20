@@ -40,21 +40,20 @@ mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY
   CMAKE_ARCHIVE_OUTPUT_DIRECTORY
   )
 
-include (DefineVersion)
 
 # ------------------------------------------------------------------------------
 # Compilers
 # ------------------------------------------------------------------------------
-include (ConfigureCompiler)
+include(ConfigureCompiler)
 
 # ------------------------------------------------------------------------------
 # Testing - must be before any targets are added
 # ------------------------------------------------------------------------------
-option (ENABLE_TESTING "Enable testing modules" ON)
-if (ENABLE_TESTING)
-  enable_testing ()
-  include (EnableCxxTestingMacros)
-endif ()
+option(ENABLE_TESTING "Enable testing modules" ON)
+if(ENABLE_TESTING)
+  enable_testing()
+  include(EnableCxxTestingMacros)
+endif()
 
 # ------------------------------------------------------------------------------
 # Sources
