@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 foreach(p
-    CMP0020 # CMake 2.8.11
-    CMP0022 # CMake 2.8.12
-    CMP0025 # CMake 3.0
-    CMP0053 # CMake 3.1
-    CMP0054 # CMake 3.1
+    CMP0020 # Automatically link Qt executables to qtmain target on Windows.
+    CMP0022 # INTERFACE_LINK_LIBRARIES defines the link interface.
+    CMP0025 # Compiler id for Apple Clang is now AppleClang.
+    CMP0053 # Simplify variable reference and escape sequence evaluation.
+    CMP0054 # Only interpret if() arguments as variables or keywords when unquoted.
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
