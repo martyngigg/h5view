@@ -1,10 +1,10 @@
 # Setup cppcheck if it exists on the system
-find_package (cppcheck)
+find_package (cppcheck REQUIRED)
 
 if (CPPCHECK_FOUND)
   set (_cppcheck_args "${CPPCHECK_ARGS}")
   set (_cppcheck_dirs
-   !!FILL IN DIRECTORIES THAT REQUIRE CHECKING!!
+   **FILL IN DIRECTORIES THAT REQUIRE CHECKING**
   )
   set (_cppcheck_source_dirs)
   foreach (_dir ${_cppcheck_dirs} )

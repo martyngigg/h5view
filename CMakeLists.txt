@@ -13,7 +13,7 @@ foreach(p
 endforeach()
 
 project(
-  project_name
+  project_name # Do a find all replace on project_name with the real one
   VERSION 0.0.0.0
 )
 
@@ -38,35 +38,20 @@ endif()
 mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY
   CMAKE_LIBRARY_OUTPUT_DIRECTORY
   CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-  )
-
+)
 
 # ------------------------------------------------------------------------------
 # Compilers
 # ------------------------------------------------------------------------------
-include(ConfigureCompiler)
+include(CompilerConfig)
 
 # ------------------------------------------------------------------------------
-# Testing - must be before any targets are added
+# Static checks
 # ------------------------------------------------------------------------------
-option(ENABLE_TESTING "Enable testing modules" ON)
-if(ENABLE_TESTING)
-  enable_testing()
-  include(EnableCxxTestingMacros)
-endif()
+include(CppCheck)
 
 # ------------------------------------------------------------------------------
 # Sources
 # ------------------------------------------------------------------------------
 
 # ...add_subdirectory() commands etc
-
-# ------------------------------------------------------------------------------
-# Static checks
-# ------------------------------------------------------------------------------
-add_subdirectory (devtools/static-analysis/cppcheck)
-
-# ------------------------------------------------------------------------------
-# Documentation
-# ------------------------------------------------------------------------------
-add_subdirectory (docs/developer/doxygen)
