@@ -57,10 +57,8 @@ if (ENABLE_TESTING)
 endif ()
 
 # ------------------------------------------------------------------------------
-# Modules & executables
+# Sources
 # ------------------------------------------------------------------------------
-# Build shared libraries by default
-set (BUILD_SHARED_LIBS ON)
 
 # ...add_subdirectory() commands etc
 
