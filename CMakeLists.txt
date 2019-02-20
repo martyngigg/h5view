@@ -12,11 +12,14 @@ foreach(p
   endif()
 endforeach()
 
-project (project_name)
+project(
+  project_name
+  VERSION 0.0.0.0
+)
 
 # Project-cmake files
-set (project_name_CMAKE_DIR "${project_name_SOURCE_DIR}/cmake/Modules")
-set (CMAKE_MODULE_PATH ${project_name_CMAKE_DIR} ${CMAKE_MODULE_PATH})
+set(project_name_CMAKE_DIR "${project_name_SOURCE_DIR}/cmake/Modules")
+set(CMAKE_MODULE_PATH ${project_name_CMAKE_DIR} ${CMAKE_MODULE_PATH})
 
 # Set up our directory structure for output libraries and binaries
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
