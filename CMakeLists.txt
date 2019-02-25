@@ -51,7 +51,16 @@ include(CompilerConfig)
 include(CppCheck)
 
 # ------------------------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------------------------
+option(ENABLE_TESTING "If enabled add tests to ctest targets" ON)
+if(ENABLE_TESTING)
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  # googlemock includes googlemock test targets
+  add_subdirectory(external/googletest/googlemock)
+  enable_testing()
+endif()
+
+# ------------------------------------------------------------------------------
 # Sources
 # ------------------------------------------------------------------------------
-
-# ...add_subdirectory() commands etc
