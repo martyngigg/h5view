@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+"""Run cmake-format on all CMake files
+"""
+from __future__ import print_function
+
+# std imports
+from argparse import ArgumentParser
+from subprocess import Popen
+
+
+DESCRIPTION = """
+Run cmake-format on files staged to the git index.
+"""
+
+
+def main():
+    parse_arguments()
+
+
+def parse_arguments():
+    """
+    Parse command line arguments
+    :returns: An argparse.Namespace object
+    """
+    parser = ArgumentParser(description=DESCRIPTION)
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    main()
+
