@@ -72,10 +72,6 @@
 //                              is/isn't available.
 //   GTEST_HAS_EXCEPTIONS     - Define it to 1/0 to indicate that exceptions
 //                              are enabled.
-//   GTEST_HAS_GLOBAL_STRING  - Define it to 1/0 to indicate that ::string
-//                              is/isn't available
-//   GTEST_HAS_GLOBAL_WSTRING - Define it to 1/0 to indicate that ::wstring
-//                              is/isn't available
 //   GTEST_HAS_POSIX_RE       - Define it to 1/0 to indicate that POSIX regular
 //                              expressions are/aren't available.
 //   GTEST_HAS_PTHREAD        - Define it to 1/0 to indicate that <pthread.h>
@@ -245,6 +241,11 @@
 //   BoolFromGTestEnv()   - parses a bool environment variable.
 //   Int32FromGTestEnv()  - parses an Int32 environment variable.
 //   StringFromGTestEnv() - parses a string environment variable.
+//
+// Deprecation warnings:
+//   GTEST_INTERNAL_DEPRECATED(message) - attribute marking a function as
+//                                        deprecated; calling a marked function
+//                                        should generate a compiler warning
 
 #include <ctype.h>   // for isspace, etc
 #include <stddef.h>  // for ptrdiff_t
@@ -264,12 +265,10 @@
 # include <TargetConditionals.h>
 #endif
 
-// Brings in the definition of HAS_GLOBAL_STRING.  This must be done
-// BEFORE we test HAS_GLOBAL_STRING.
-#include <string>     // NOLINT
 #include <algorithm>  // NOLINT
 #include <iostream>   // NOLINT
 #include <sstream>    // NOLINT
+#include <string>     // NOLINT
 #include <tuple>
 #include <utility>
 #include <vector>  // NOLINT
@@ -453,10 +452,6 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 # error "::std::string isn't available."
 #endif  // !defined(GTEST_HAS_STD_STRING)
 
-#ifndef GTEST_HAS_GLOBAL_STRING
-# define GTEST_HAS_GLOBAL_STRING 0
-#endif  // GTEST_HAS_GLOBAL_STRING
-
 #ifndef GTEST_HAS_STD_WSTRING
 // The user didn't tell us whether ::std::wstring is available, so we need
 // to figure it out.
@@ -467,13 +462,6 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
     (!(GTEST_OS_LINUX_ANDROID || GTEST_OS_CYGWIN || GTEST_OS_SOLARIS))
 
 #endif  // GTEST_HAS_STD_WSTRING
-
-#ifndef GTEST_HAS_GLOBAL_WSTRING
-// The user didn't tell us whether ::wstring is available, so we need
-// to figure it out.
-# define GTEST_HAS_GLOBAL_WSTRING \
-    (GTEST_HAS_STD_WSTRING && GTEST_HAS_GLOBAL_STRING)
-#endif  // GTEST_HAS_GLOBAL_WSTRING
 
 // Determines whether RTTI is available.
 #ifndef GTEST_HAS_RTTI
@@ -814,6 +802,18 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 # define GTEST_ATTRIBUTE_NO_SANITIZE_ADDRESS_
 #endif  // __clang__
 
+// A function level attribute to disable HWAddressSanitizer instrumentation.
+#if defined(__clang__)
+# if __has_feature(hwaddress_sanitizer)
+#  define GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_ \
+       __attribute__((no_sanitize("hwaddress")))
+# else
+#  define GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
+# endif  // __has_feature(hwaddress_sanitizer)
+#else
+# define GTEST_ATTRIBUTE_NO_SANITIZE_HWADDRESS_
+#endif  // __clang__
+
 // A function level attribute to disable ThreadSanitizer instrumentation.
 #if defined(__clang__)
 # if __has_feature(thread_sanitizer)
@@ -880,18 +880,6 @@ struct IsSame<T, T> {
 // Evaluates to the number of elements in 'array'.
 #define GTEST_ARRAY_SIZE_(array) (sizeof(array) / sizeof(array[0]))
 
-#if GTEST_HAS_GLOBAL_STRING
-typedef ::string string;
-#else
-typedef ::std::string string;
-#endif  // GTEST_HAS_GLOBAL_STRING
-
-#if GTEST_HAS_GLOBAL_WSTRING
-typedef ::wstring wstring;
-#elif GTEST_HAS_STD_WSTRING
-typedef ::std::wstring wstring;
-#endif  // GTEST_HAS_GLOBAL_WSTRING
-
 // A helper for suppressing warnings on constant condition.  It just
 // returns 'condition'.
 GTEST_API_ bool IsTrue(bool condition);
@@ -913,12 +901,6 @@ class GTEST_API_ RE {
   // Constructs an RE from a string.
   RE(const ::std::string& regex) { Init(regex.c_str()); }  // NOLINT
 
-# if GTEST_HAS_GLOBAL_STRING
-
-  RE(const ::string& regex) { Init(regex.c_str()); }  // NOLINT
-
-# endif  // GTEST_HAS_GLOBAL_STRING
-
   RE(const char* regex) { Init(regex); }  // NOLINT
   ~RE();
 
@@ -935,17 +917,6 @@ class GTEST_API_ RE {
   static bool PartialMatch(const ::std::string& str, const RE& re) {
     return PartialMatch(str.c_str(), re);
   }
-
-# if GTEST_HAS_GLOBAL_STRING
-
-  static bool FullMatch(const ::string& str, const RE& re) {
-    return FullMatch(str.c_str(), re);
-  }
-  static bool PartialMatch(const ::string& str, const RE& re) {
-    return PartialMatch(str.c_str(), re);
-  }
-
-# endif  // GTEST_HAS_GLOBAL_STRING
 
   static bool FullMatch(const char* str, const RE& re);
   static bool PartialMatch(const char* str, const RE& re);
@@ -1202,9 +1173,6 @@ std::vector<std::string> GetInjectableArgvs();
 // Deprecated: pass the args vector by value instead.
 void SetInjectableArgvs(const std::vector<std::string>* new_argvs);
 void SetInjectableArgvs(const std::vector<std::string>& new_argvs);
-#if GTEST_HAS_GLOBAL_STRING
-void SetInjectableArgvs(const std::vector< ::string>& new_argvs);
-#endif  // GTEST_HAS_GLOBAL_STRING
 void ClearInjectableArgvs();
 
 #endif  // GTEST_HAS_DEATH_TEST
@@ -2301,6 +2269,8 @@ const char* StringFromGTestEnv(const char* flag, const char* default_val);
 }  // namespace internal
 }  // namespace testing
 
+#if !defined(GTEST_INTERNAL_DEPRECATED)
+
 // Internal Macro to mark an API deprecated, for googletest usage only
 // Usage: class GTEST_INTERNAL_DEPRECATED(message) MyClass or
 // GTEST_INTERNAL_DEPRECATED(message) <return_type> myFunction(); Every usage of
@@ -2316,5 +2286,7 @@ const char* StringFromGTestEnv(const char* flag, const char* default_val);
 #else
 #define GTEST_INTERNAL_DEPRECATED(message)
 #endif
+
+#endif  // !defined(GTEST_INTERNAL_DEPRECATED)
 
 #endif  // GTEST_INCLUDE_GTEST_INTERNAL_GTEST_PORT_H_
