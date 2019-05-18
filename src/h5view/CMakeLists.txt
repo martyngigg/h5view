@@ -1,0 +1,14 @@
+set(SRCS
+  h5view.cpp
+)
+
+set(HEADERS
+  h5view.hpp
+)
+
+add_library(h5view ${SRCS} ${HEADERS})
+target_link_libraries(h5view PRIVATE ${CONAN_LIBS})
+set_property(TARGET h5view
+  APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../>
+)
