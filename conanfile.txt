@@ -1,0 +1,8 @@
+[requires]
+hdf5/1.10.5-dm1@ess-dmsc/stable
+
+[generators]
+cmake
+
+[options]
+hdf5:shared=True
