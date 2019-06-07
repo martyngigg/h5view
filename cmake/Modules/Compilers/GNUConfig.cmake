@@ -44,6 +44,8 @@ option(ENABLE_SANITIZERS
 if(ENABLE_SANITIZERS)
   set(SANITIZER_FLAGS
       "-fsanitize=address,undefined,leak -fno-omit-frame-pointer")
+else()
+  set(SANITIZER_FLAGS "")
 endif()
 
 # Clang-tidy
