@@ -45,10 +45,13 @@ mark_as_advanced(
 include(CompilerConfig)
 
 # ------------------------------------------------------------------------------
-# Dependencies with Conan
+# Dependencies
 # ------------------------------------------------------------------------------
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+option(USE_CONAN "Use conan for all dependencies" OFF)
+if(USE_CONAN)
+  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  conan_basic_setup()
+endif()
 
 # ------------------------------------------------------------------------------
 # Static checks
