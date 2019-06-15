@@ -48,14 +48,24 @@ include(CompilerConfig)
 # Dependencies
 # ------------------------------------------------------------------------------
 option(USE_CONAN "Use conan for all dependencies" OFF)
+option(USE_CONDA "Use conda for all dependencies" OFF)
 if(USE_CONAN)
   if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
       message(FATAL_ERROR "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?")
   endif()
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
   conan_basic_setup()
+elseif(USE_CONDA)
+  # does it look like we are in a conda environment
+  if(NOT DEFINED ENV{CONDA_PREFIX})
+    message(FATAL_ERROR "CONDA_PREFIX env variable not defined. Has a conda environment been defined?")
+  endif()
+  # set variables to help cmake find packages
+  set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
+
+  find_package(HDF5 COMPONENTS CXX REQUIRED)
 else()
-  message(FATAL_ERROR "Cannot continue without Conan.")
+  message(FATAL_ERROR "Must use either conda or conan for dependencies")
 endif()
 
 # ------------------------------------------------------------------------------

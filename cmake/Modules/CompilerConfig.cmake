@@ -6,9 +6,11 @@
 # subdirectory
 # ------------------------------------------------------------------------------
 
-# Required C++14
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Required C++14 minimum. Conda compilers control themselves
+if(NOT USE_CONDA)
+  set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD_REQUIRED OFF)
+endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Visibility hidden
