@@ -29,15 +29,6 @@ if(HAVE_GCC_ERROR_RETURN_TYPE)
   set(CMAKE_CXX_FLAGS_ERROR "-Werror=return-type")
 endif()
 
-# Gcc visibility support
-check_cxx_compiler_flag(-fvisibility=hidden HAVE_GCC_VISIBILITY)
-if(HAVE_GCC_ERROR_RETURN_TYPE)
-  set(
-    CMAKE_CXX_FLAGS_RELEASE
-    "${CMAKE_CXX_FLAGS_RELEASE} -fvisibility=hidden -fvisibility-inlines-hidden"
-    )
-endif()
-
 # Sanitizers
 option(ENABLE_SANITIZERS
        "Enable address and undefined sanitizers for debug builds" ON)
