@@ -49,8 +49,13 @@ include(CompilerConfig)
 # ------------------------------------------------------------------------------
 option(USE_CONAN "Use conan for all dependencies" OFF)
 if(USE_CONAN)
+  if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+      message(FATAL_ERROR "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?")
+  endif()
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
   conan_basic_setup()
+else()
+  message(FATAL_ERROR "Cannot continue without Conan.")
 endif()
 
 # ------------------------------------------------------------------------------
