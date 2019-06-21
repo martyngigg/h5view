@@ -34,10 +34,8 @@ endif()
 if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${h5view_BINARY_DIR}/lib")
 endif()
-mark_as_advanced(
-  CMAKE_RUNTIME_OUTPUT_DIRECTORY CMAKE_LIBRARY_OUTPUT_DIRECTORY
-  CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-)
+mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY CMAKE_LIBRARY_OUTPUT_DIRECTORY
+                 CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 
 # ------------------------------------------------------------------------------
 # Compilers
@@ -51,14 +49,20 @@ option(USE_CONAN "Use conan for all dependencies" OFF)
 option(USE_CONDA "Use conda for all dependencies" OFF)
 if(USE_CONAN)
   if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-      message(FATAL_ERROR "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?")
+    message(
+      FATAL_ERROR
+        "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?"
+    )
   endif()
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
   conan_basic_setup()
 elseif(USE_CONDA)
   # does it look like we are in a conda environment
   if(NOT DEFINED ENV{CONDA_PREFIX})
-    message(FATAL_ERROR "CONDA_PREFIX env variable not defined. Has a conda environment been defined?")
+    message(
+      FATAL_ERROR
+        "CONDA_PREFIX env variable not defined. Has a conda environment been defined?"
+    )
   endif()
   # set variables to help cmake find packages
   set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})

@@ -20,8 +20,11 @@
 # at http://www.boost.org/LICENSE_1_0.txt)
 
 file(TO_CMAKE_PATH "${CPPCHECK_ROOT_DIR}" CPPCHECK_ROOT_DIR)
-set(CPPCHECK_ROOT_DIR "${CPPCHECK_ROOT_DIR}"
-    CACHE PATH "Path to search for cppcheck")
+set(
+  CPPCHECK_ROOT_DIR
+  "${CPPCHECK_ROOT_DIR}"
+  CACHE PATH "Path to search for cppcheck"
+)
 
 # cppcheck app bundles on Mac OS X are GUI, we want command line only
 set(_oldappbundlesetting ${CMAKE_FIND_APPBUNDLE})
@@ -33,11 +36,13 @@ endif()
 
 # If we have a custom path, look there first.
 if(CPPCHECK_ROOT_DIR)
-  find_program(CPPCHECK_EXECUTABLE
-               NAMES cppcheck cli
-               PATHS "${CPPCHECK_ROOT_DIR}"
-               PATH_SUFFIXES cli
-               NO_DEFAULT_PATH)
+  find_program(
+    CPPCHECK_EXECUTABLE
+    NAMES cppcheck cli
+    PATHS "${CPPCHECK_ROOT_DIR}"
+    PATH_SUFFIXES cli
+    NO_DEFAULT_PATH
+  )
 endif()
 
 find_program(CPPCHECK_EXECUTABLE NAMES cppcheck)
@@ -52,7 +57,7 @@ if(NOT EXISTS "${_cppcheckdummyfile}")
   message(
     FATAL_ERROR
       "Missing file ${_cppcheckdummyfile} - should be alongside Findcppcheck.cmake, can be found at https://github.com/rpavlik/cmake-modules"
-    )
+  )
 endif()
 
 function(_cppcheck_test_arg _resultvar _arg)
@@ -60,10 +65,15 @@ function(_cppcheck_test_arg _resultvar _arg)
     set(${_resultvar} NO)
     return()
   endif()
-  execute_process(COMMAND "${CPPCHECK_EXECUTABLE}" "${_arg}" "--quiet"
-                          "${_cppcheckdummyfile}"
-                  RESULT_VARIABLE _cppcheck_result
-                  OUTPUT_QUIET ERROR_QUIET)
+  execute_process(
+    COMMAND
+      "${CPPCHECK_EXECUTABLE}"
+      "${_arg}"
+      "--quiet"
+      "${_cppcheckdummyfile}"
+    RESULT_VARIABLE _cppcheck_result
+    OUTPUT_QUIET ERROR_QUIET
+  )
   if("${_cppcheck_result}" EQUAL 0)
     set(${_resultvar} YES PARENT_SCOPE)
   else()
@@ -118,7 +128,7 @@ if(CPPCHECK_EXECUTABLE)
     message(
       STATUS
         "WARNING: Can't detect whether CPPCHECK wants new or old-style arguments!"
-      )
+    )
   endif()
 
   set(CPPCHECK_QUIET_ARG "--quiet")
@@ -129,18 +139,20 @@ endif()
 set(
   CPPCHECK_ALL
   "${CPPCHECK_EXECUTABLE} ${CPPCHECK_POSSIBLEERROR_ARG} ${CPPCHECK_UNUSEDFUNC_ARG} ${CPPCHECK_STYLE_ARG} ${CPPCHECK_QUIET_ARG} ${CPPCHECK_INCLUDEPATH_ARG} some/include/path"
-  )
+)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(cppcheck
-                                  DEFAULT_MSG
-                                  CPPCHECK_ALL
-                                  CPPCHECK_EXECUTABLE
-                                  CPPCHECK_POSSIBLEERROR_ARG
-                                  CPPCHECK_UNUSEDFUNC_ARG
-                                  CPPCHECK_STYLE_ARG
-                                  CPPCHECK_INCLUDEPATH_ARG
-                                  CPPCHECK_QUIET_ARG)
+find_package_handle_standard_args(
+  cppcheck
+  DEFAULT_MSG
+  CPPCHECK_ALL
+  CPPCHECK_EXECUTABLE
+  CPPCHECK_POSSIBLEERROR_ARG
+  CPPCHECK_UNUSEDFUNC_ARG
+  CPPCHECK_STYLE_ARG
+  CPPCHECK_INCLUDEPATH_ARG
+  CPPCHECK_QUIET_ARG
+)
 
 if(CPPCHECK_FOUND OR CPPCHECK_MARK_AS_ADVANCED)
   mark_as_advanced(CPPCHECK_ROOT_DIR)

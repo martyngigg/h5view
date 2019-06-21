@@ -31,10 +31,12 @@ endif()
 
 # Sanitizers
 option(ENABLE_SANITIZERS
-       "Enable address and undefined sanitizers for debug builds" ON)
+       "Enable address, undefined and leak sanitizers for debug builds" ON)
 if(ENABLE_SANITIZERS)
-  set(SANITIZER_FLAGS
-      "-fsanitize=address,undefined,leak -fno-omit-frame-pointer")
+  set(
+    SANITIZER_FLAGS
+    "-fsanitize=address,undefined,leak -fno-omit-frame-pointer"
+  )
 else()
   set(SANITIZER_FLAGS "")
 endif()
@@ -48,12 +50,12 @@ if(ENABLE_CLANG_TIDY)
     set(
       CLANG_TIDY_CHECKS
       "-*,performance-for-range-copy,performance-unnecessary-copy-initialization,modernize-use-override,modernize-use-nullptr,modernize-loop-convert,modernize-use-bool-literals,modernize-deprecated-headers,misc-*,-misc-unused-parameters"
-      )
+    )
     set(
       CMAKE_CXX_CLANG_TIDY
       "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
-      CACHE STRING ""
-      FORCE)
+      CACHE STRING "" FORCE
+    )
   else()
     message(AUTHOR_WARNING "clang-tidy not found!")
     set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "" FORCE) # delete it
@@ -63,9 +65,12 @@ else()
 endif()
 
 # Set extra warning flags in debug modes
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
-    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${CMAKE_CXX_FLAGS_WARN}")
+set(
+  CMAKE_CXX_FLAGS_RELWITHDEBINFO
+  "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} ${CMAKE_CXX_FLAGS_WARN}"
+)
 set(
   CMAKE_CXX_FLAGS_DEBUG
   "${CMAKE_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_WARN} ${CMAKE_CXX_FLAGS_ERROR} ${SANITIZER_FLAGS}"
-  )
+)
+set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} ${SANITIZER_FLAGS}")

@@ -1,40 +1,41 @@
 {
-  "line_width": 80, 
-  "dangle_parens": true, 
-  "first_comment_is_literal": false, 
+  "line_width": 80,
+  "dangle_parens": true,
+  "first_comment_is_literal": false,
   "algorithm_order": [
-    0, 
-    1, 
-    2, 
-    3
-  ], 
-  "command_case": "lower", 
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "command_case": "lower",
   "additional_commands": {
     "foo": {
       "flags": [
-        "BAR", 
+        "BAR",
         "BAZ"
-      ], 
+      ],
       "kwargs": {
-        "HEADERS": "*", 
-        "DEPENDS": "*", 
+        "HEADERS": "*",
+        "DEPENDS": "*",
         "SOURCES": "*"
       }
     }
-  }, 
-  "separate_fn_name_with_space": false, 
-  "always_wrap": [], 
-  "separate_ctrl_name_with_space": false, 
-  "max_subargs_per_line": 3, 
-  "fence_pattern": "^\\s*([`~]{3}[`~]*)(.*)$", 
-  "enable_markup": true, 
-  "ruler_pattern": "^\\s*[^\\w\\s]{3}.*[^\\w\\s]{3}$", 
-  "tab_size": 2, 
-  "keyword_case": "unchanged", 
-  "enum_char": ".", 
-  "emit_byteorder_mark": false, 
-  "per_command": {}, 
-  "literal_comment_pattern": null, 
-  "bullet_char": "*", 
+  },
+  "separate_fn_name_with_space": false,
+  "always_wrap": [],
+  "separate_ctrl_name_with_space": false,
+  "max_subargs_per_line": 3,
+  "fence_pattern": "^\\s*([`~]{3}[`~]*)(.*)$",
+  "enable_markup": true,
+  "ruler_pattern": "^\\s*[^\\w\\s]{3}.*[^\\w\\s]{3}$",
+  "tab_size": 2,
+  "keyword_case": "unchanged",
+  "enum_char": ".",
+  "emit_byteorder_mark": false,
+  "per_command": {},
+  "literal_comment_pattern": null,
+  "bullet_char": "*",
   "line_ending": "unix"
 }
