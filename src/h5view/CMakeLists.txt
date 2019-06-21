@@ -2,7 +2,7 @@ set(SRCS h5view.cpp)
 
 set(HEADERS h5view.hpp)
 
-add_library(h5view ${SRCS} ${HEADERS})
+add_library(h5view SHARED ${SRCS} ${HEADERS})
 include(GenerateExportHeader)
 generate_export_header(h5view)
 target_include_directories(h5view PUBLIC ${CMAKE_CURRENT_BINARY_DIR})

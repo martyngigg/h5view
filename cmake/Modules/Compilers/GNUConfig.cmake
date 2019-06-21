@@ -31,11 +31,11 @@ endif()
 
 # Sanitizers
 option(ENABLE_SANITIZERS
-       "Enable address, undefined and leak sanitizers for debug builds" ON)
+       "Enable address and leak sanitizers for debug builds" ON)
 if(ENABLE_SANITIZERS)
   set(
     SANITIZER_FLAGS
-    "-fsanitize=address,undefined,leak -fno-omit-frame-pointer"
+    "-fsanitize=address,leak -fno-omit-frame-pointer"
   )
 else()
   set(SANITIZER_FLAGS "")
