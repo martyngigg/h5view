@@ -47,6 +47,7 @@ include(CompilerConfig)
 # ------------------------------------------------------------------------------
 option(USE_CONAN "Use conan for all dependencies" OFF)
 option(USE_CONDA "Use conda for all dependencies" OFF)
+option(USE_SYSTEM "Use system dependencies" ON)
 if(USE_CONAN)
   if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     message(
@@ -68,8 +69,10 @@ elseif(USE_CONDA)
   set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
 
   find_package(HDF5 COMPONENTS CXX REQUIRED)
+elseif(USE_SYSTEM)
+  find_package(HDF5 COMPONENTS CXX REQUIRED)
 else()
-  message(FATAL_ERROR "Must use either conda or conan for dependencies")
+  message(FATAL_ERROR "Must use either conda, conan or system for dependencies")
 endif()
 
 # ------------------------------------------------------------------------------
