@@ -45,35 +45,14 @@ include(CompilerConfig)
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
-option(USE_CONAN "Use conan for all dependencies" OFF)
-option(USE_CONDA "Use conda for all dependencies" OFF)
-option(USE_SYSTEM "Use system dependencies" ON)
-if(USE_CONAN)
-  if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    message(
-      FATAL_ERROR
-        "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?"
-    )
-  endif()
-  include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-  conan_basic_setup(TARGETS KEEP_RPATHS)
-elseif(USE_CONDA)
-  # does it look like we are in a conda environment
-  if(NOT DEFINED ENV{CONDA_PREFIX})
-    message(
-      FATAL_ERROR
-        "CONDA_PREFIX env variable not defined. Has a conda environment been defined?"
-    )
-  endif()
-  # set variables to help cmake find packages
-  set(CMAKE_PREFIX_PATH $ENV{CONDA_PREFIX})
-
-  find_package(HDF5 COMPONENTS CXX REQUIRED)
-elseif(USE_SYSTEM)
-  find_package(HDF5 COMPONENTS CXX REQUIRED)
-else()
-  message(FATAL_ERROR "Must use either conda, conan or system for dependencies")
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+  message(
+    FATAL_ERROR
+      "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?"
+  )
 endif()
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS KEEP_RPATHS)
 
 # ------------------------------------------------------------------------------
 # Static checks
@@ -109,9 +88,10 @@ if(ENABLE_CPACK)
   # Install any runtime libraries required
   include(InstallRequiredSystemLibraries)
 
-  if(USE_CONAN)
-    # Bundle conan dependencies
-    install (CODE "
+  # Bundle conan dependencies
+  install(
+    CODE
+      "
       execute_process(COMMAND
                         conan imports
                           -imf \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX} ${CMAKE_SOURCE_DIR}
@@ -121,8 +101,8 @@ if(ENABLE_CPACK)
         message(\"\${_out}\")
         message(FATAL_ERROR \"Package script failed!!!\n\")
       endif()
-    ")
-  endif()
+    "
+  )
 
   set(CPACK_PACKAGE_VERSION_MAJOR "${h5view_VERSION_MAJOR}")
   set(CPACK_PACKAGE_VERSION_MINOR "${h5view_VERSION_MINOR}")
