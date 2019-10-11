@@ -3,14 +3,9 @@ find_package(cppcheck REQUIRED)
 
 if(CPPCHECK_FOUND)
   set(_cppcheck_args "${CPPCHECK_ARGS}")
-  set(
-    _cppcheck_dirs
-    **FILL
-    IN
-    DIRECTORIES
-    THAT
-    REQUIRE
-    CHECKING**
+  set(_cppcheck_dirs
+    src/h5view
+    src/h5viewer
   )
   set(_cppcheck_source_dirs)
   foreach(_dir ${_cppcheck_dirs})
@@ -28,6 +23,10 @@ if(CPPCHECK_FOUND)
       ${CPPCHECK_UNUSEDFUNC_ARG}
       ${CPPCHECK_STYLE_ARG}
       ${CPPCHECK_QUIET_ARG}
+      -I ${CMAKE_SOURCE_DIR}/src
+      -I ${CONAN_INCLUDE_DIRS_HDF5}
+      --suppress=*:${CONAN_INCLUDE_DIRS_HDF5}/*
+      --force
       ${_cppcheck_source_dirs}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Running cppcheck"
