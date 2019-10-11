@@ -14,7 +14,7 @@ foreach(
   endif()
 endforeach()
 
-project(h5view VERSION 0.0.0.1 LANGUAGES CXX)
+project(h5view VERSION 0.1.0 LANGUAGES CXX)
 
 # Project-cmake files
 set(h5view_CMAKE_DIR "${h5view_SOURCE_DIR}/cmake/Modules")
@@ -56,7 +56,7 @@ if(USE_CONAN)
     )
   endif()
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-  conan_basic_setup(TARGETS)
+  conan_basic_setup(TARGETS KEEP_RPATHS)
 elseif(USE_CONDA)
   # does it look like we are in a conda environment
   if(NOT DEFINED ENV{CONDA_PREFIX})
@@ -92,6 +92,46 @@ if(ENABLE_TESTING)
 endif()
 
 # ------------------------------------------------------------------------------
-# Sources
+# Targets
 # ------------------------------------------------------------------------------
+# Setup default RPATH for installed targets
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+
+# Process sources
 add_subdirectory(src)
+
+# ------------------------------------------------------------------------------
+# Packaging
+# ------------------------------------------------------------------------------
+option(ENABLE_CPACK "If true, enable package rules to be generated.
+                     Currently on supports Debian" OFF)
+if(ENABLE_CPACK)
+  # Install any runtime libraries required
+  include(InstallRequiredSystemLibraries)
+
+  if(USE_CONAN)
+    # Bundle conan dependencies
+    install (CODE "
+      execute_process(COMMAND
+                        conan imports
+                          -imf \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX} ${CMAKE_SOURCE_DIR}
+                      RESULT_VARIABLE install_name_tool_result
+                      OUTPUT_VARIABLE _out ERROR_VARIABLE _out)
+      if(NOT install_name_tool_result EQUAL 0)
+        message(\"\${_out}\")
+        message(FATAL_ERROR \"Package script failed!!!\n\")
+      endif()
+    ")
+  endif()
+
+  set(CPACK_PACKAGE_VERSION_MAJOR "${h5view_VERSION_MAJOR}")
+  set(CPACK_PACKAGE_VERSION_MINOR "${h5view_VERSION_MINOR}")
+  set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+
+  set(CPACK_GENERATOR DEB)
+  set(CPACK_DEBIAN_PACKAGE_MAINTAINER martyngigg)
+  set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+  set(CPACK_SYSTEM_NAME amd64)
+
+  include(CPack)
+endif()

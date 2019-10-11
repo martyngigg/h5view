@@ -6,3 +6,6 @@ cmake
 
 [options]
 hdf5:shared=True
+
+[imports]
+lib, *.so* -> ./lib
