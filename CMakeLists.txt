@@ -108,10 +108,16 @@ if(ENABLE_CPACK)
   set(CPACK_PACKAGE_VERSION_MINOR "${h5view_VERSION_MINOR}")
   set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
-  set(CPACK_GENERATOR DEB)
-  set(CPACK_DEBIAN_PACKAGE_MAINTAINER martyngigg)
-  set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
-  set(CPACK_SYSTEM_NAME amd64)
+  # create a package for the platform if not generate a source tarball
+  if(EXISTS /etc/debian_version) # debian-like
+    set(CPACK_GENERATOR DEB)
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER martyngigg)
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
+  elseif(EXISTS /etc/redhat-release) # redhat-like
+    set(CPACK_GENERATOR RPM)
+    set(CPACK_RPM_PACKAGE_REQUIRES "")
+    set(CPACK_SYSTEM_NAME amd64)
+  endif()
 
   include(CPack)
 endif()
