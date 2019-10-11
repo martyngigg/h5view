@@ -8,7 +8,7 @@ generate_export_header(h5view)
 target_include_directories(h5view PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 if(USE_CONAN)
-  target_link_libraries(h5view PRIVATE ${CONDA_LIBS})
+  target_link_libraries(h5view PUBLIC CONAN_PKG::hdf5)
 elseif(USE_CONDA OR USE_SYSTEM)
   target_include_directories(h5view PRIVATE ${HDF5_INCLUDE_DIRS})
   target_link_libraries(h5view PUBLIC ${HDF5_CXX_LIBRARIES})

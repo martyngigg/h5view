@@ -56,7 +56,7 @@ if(USE_CONAN)
     )
   endif()
   include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-  conan_basic_setup()
+  conan_basic_setup(TARGETS)
 elseif(USE_CONDA)
   # does it look like we are in a conda environment
   if(NOT DEFINED ENV{CONDA_PREFIX})
