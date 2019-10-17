@@ -7,3 +7,5 @@ target_include_directories(
 )
 target_link_libraries(h5utils PRIVATE h5view)
 set_property(TARGET h5utils PROPERTY PREFIX "")
+
+install(TARGETS h5utils DESTINATION lib)
