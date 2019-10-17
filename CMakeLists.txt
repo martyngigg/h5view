@@ -45,13 +45,11 @@ include(CompilerConfig)
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
-# Python
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
   message(
     FATAL_ERROR
-      "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake. Have you run 'conan install ...'?"
+      "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake."
+      "Have you run 'conan install ...'?"
   )
 endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -105,42 +103,6 @@ if(ENABLE_CPACK)
         message(FATAL_ERROR \"Package script failed!!!\\n\")
       endif()
     "
-  )
-
-  # Create python environment in the package
-  install(
-    CODE
-      "
-      execute_process(COMMAND
-                        ${PYTHON_EXECUTABLE} -m virtualenv
-                          --no-site-packages --always-copy
-                          --python=${PYTHON_EXECUTABLE} \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}
-                      RESULT_VARIABLE virtualenv_result
-                      OUTPUT_VARIABLE _out ERROR_VARIABLE _out)
-      if(NOT virtualenv_result EQUAL 0)
-        message(\"\${_out}\")
-        message(FATAL_ERROR \"Failed to create virtual environment in package\\n\")
-      endif()
-      execute_process(COMMAND
-                        ${PYTHON_EXECUTABLE} -m virtualenv
-                          --relocatable
-                          --python=${PYTHON_EXECUTABLE} \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}
-                      RESULT_VARIABLE virtualenv_result
-                      OUTPUT_VARIABLE _out ERROR_VARIABLE _out)
-      if(NOT virtualenv_result EQUAL 0)
-        message(\"\${_out}\")
-        message(FATAL_ERROR \"Failed to make virtual environment in package relocatable\\n\")
-      endif()
-      execute_process(COMMAND
-                        \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/bin/python3 -m pip
-                          install --force-reinstall -r ${CMAKE_SOURCE_DIR}/requirements/install-requirements.txt
-                      RESULT_VARIABLE pip_result
-                      OUTPUT_VARIABLE _out ERROR_VARIABLE _out)
-      if(NOT pip_result EQUAL 0)
-        message(\"\${_out}\")
-        message(FATAL_ERROR \"Failed while installing Python requirements\\n\")
-      endif()
-      "
   )
 
   set(CPACK_PACKAGE_VERSION_MAJOR "${h5view_VERSION_MAJOR}")

@@ -12,4 +12,6 @@ cmake
 hdf5:shared=True
 
 [imports]
+bin, python* -> ./bin
 lib, *.so* -> ./lib
+lib, python3.8/* -> lib
