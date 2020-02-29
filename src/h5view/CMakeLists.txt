@@ -17,5 +17,10 @@ set_property(
 
 install(TARGETS h5view DESTINATION lib)
 
+
+if(ENABLE_TESTING)
+  add_subdirectory(test)
+endif()
+
 # Python bindings
 add_subdirectory(python)

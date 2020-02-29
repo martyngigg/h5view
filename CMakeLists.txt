@@ -66,8 +66,17 @@ include(CppCheck)
 option(ENABLE_TESTING "If enabled add tests to ctest targets" ON)
 if(ENABLE_TESTING)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  # googlemock includes googlemock test targets
-  add_subdirectory(external/googletest/googlemock)
+  add_subdirectory(external/googletest)
+  mark_as_advanced(
+    BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
+    gmock_build_tests gtest_build_samples gtest_build_tests
+    gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+  )
+  set_target_properties(gtest PROPERTIES FOLDER extern)
+  set_target_properties(gtest_main PROPERTIES FOLDER extern)
+  set_target_properties(gmock PROPERTIES FOLDER extern)
+  set_target_properties(gmock_main PROPERTIES FOLDER extern)
+  include(GoogleTest)
   enable_testing()
 endif()
 
