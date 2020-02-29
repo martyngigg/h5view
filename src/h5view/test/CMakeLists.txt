@@ -4,6 +4,8 @@ set(TEST_SRCS
 
 set(TEST_NAME h5view_test)
 add_executable(${TEST_NAME} ${TEST_SRCS})
+target_compile_options(${TEST_NAME} PRIVATE ${COVERAGE_CFLAGS})
+target_link_options(${TEST_NAME} PRIVATE ${COVERAGE_LFLAGS})
 target_link_libraries(${TEST_NAME} h5view gtest gtest_main)
 gtest_discover_tests(${TEST_NAME}
   # set a working directory so your project root so that you can find test data via paths relative to the project root

@@ -5,6 +5,8 @@ set(HEADERS h5view.hpp)
 add_library(h5view SHARED ${SRCS} ${HEADERS})
 include(GenerateExportHeader)
 generate_export_header(h5view)
+target_compile_options(h5view PRIVATE ${COVERAGE_CFLAGS})
+target_link_options(h5view PRIVATE ${COVERAGE_LFLAGS})
 target_include_directories(h5view PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(h5view PUBLIC CONAN_PKG::hdf5)
 set_property(
