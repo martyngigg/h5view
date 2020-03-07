@@ -3,11 +3,16 @@
 
 #include "h5view_export.h"
 #include <string>
+#include <vector>
 
 namespace h5view {
 
-/// Display name of the root group
-H5VIEW_EXPORT void root_group_name(const std::string &filename);
+/// Return the name of the first element
+H5VIEW_EXPORT std::string first_object_name(const std::string &filename);
+
+/// Return value of the first element
+H5VIEW_EXPORT std::vector<double> object_value(const std::string &filename,
+                                               const std::string &groupname);
 
 }
 

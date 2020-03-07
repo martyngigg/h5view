@@ -1,31 +1,30 @@
 #include "h5view.hpp"
 #include "H5Cpp.h"
-#include <iostream>
 
 using namespace H5;
-using std::cout;
 
-namespace {
-  herr_t display_element_name(hid_t /*group*/,
-                              const char *name,
-                              void */*op_data*/) {
-    std::cout << name << "\n";
-    return 0;
-  }
-}
 
 namespace h5view {
 
 /**
- * Print the name of the root group in the file
  * @param filepath A full path to the file
  */
-void root_group_name(const std::string &filepath) {
-  std::cout << "Opening '" << filepath << "'\n";
+std::string first_object_name(const std::string &filepath) {
   H5File h5file(filepath, H5F_ACC_RDONLY);
-  std::cout << "\nroot attributes:\n";
-  int unused{0};
-  h5file.iterateElems("/", &unused, display_element_name, nullptr);
+  return h5file.getObjnameByIdx(0);
+}
+
+/**
+ * @param filepath A full path to the file
+ * @param groupname The name of the group to open
+ */
+ std::vector<double> object_value(const std::string &filepath,
+                                  const std::string &groupname) {
+  H5File h5file(filepath, H5F_ACC_RDONLY);
+  auto dataset = h5file.openDataSet(filepath);
+  std::vector<double> buffer(dataset.getStorageSize());
+  dataset.read((void*)buffer.data(), PredType::NATIVE_DOUBLE);
+  return buffer;
 }
 
 }
