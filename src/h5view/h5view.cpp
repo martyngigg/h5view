@@ -24,8 +24,8 @@ void root_group_name(const std::string &filepath) {
   std::cout << "Opening '" << filepath << "'\n";
   H5File h5file(filepath, H5F_ACC_RDONLY);
   std::cout << "\nroot attributes:\n";
-  int unused{0};
-  h5file.iterateElems("/", &unused, display_element_name, nullptr);
+  int unusedArg{0};
+  h5file.iterateElems("/", &unusedArg, display_element_name, nullptr);
 }
 
 }
