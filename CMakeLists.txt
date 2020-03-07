@@ -64,7 +64,7 @@ include(CppCheck)
 # Testing
 # ------------------------------------------------------------------------------
 option(ENABLE_TESTING "If enabled add tests to ctest targets" ON)
-option(ENABLE_COVERAGE "If enabled add coverage reporting" ON)
+option(ENABLE_COVERAGE "If enabled add coverage reporting" OFF)
 if(ENABLE_TESTING)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   add_subdirectory(external/googletest)
