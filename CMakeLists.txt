@@ -67,6 +67,7 @@ option(ENABLE_TESTING "If enabled add tests to ctest targets" ON)
 option(ENABLE_COVERAGE "If enabled add coverage reporting" OFF)
 if(ENABLE_TESTING)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  set(GTEST_LIBS gtest gtest_main)
   add_subdirectory(external/googletest)
   mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
@@ -80,8 +81,8 @@ if(ENABLE_TESTING)
   include(GoogleTest)
   enable_testing()
   if(ENABLE_COVERAGE)
-    set(COVERAGE_CFLAGS -fprofile-arcs -ftest-coverage)
-    set(COVERAGE_LFLAGS -lgcov --coverage)
+    add_compile_options(-fprofile-arcs -ftest-coverage)
+    link_libraries(gcov)
   endif()
 endif()
 

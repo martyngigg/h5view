@@ -7,7 +7,6 @@ message(STATUS "gcc version: ${GCC_COMPILER_VERSION}")
 # Addtional warnings for GCC
 set(CMAKE_CXX_FLAGS_WARN "\
 -Wnon-virtual-dtor \
--Wno-long-long-ansi \
 -Wcast-align \
 -Wchar-subscripts \
 -Wall \
