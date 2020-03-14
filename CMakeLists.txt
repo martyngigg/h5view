@@ -83,6 +83,13 @@ if(ENABLE_TESTING)
   if(ENABLE_COVERAGE)
     add_compile_options(-fprofile-arcs -ftest-coverage)
     link_libraries(gcov)
+    file(WRITE ${CMAKE_BINARY_DIR}/collect-gcov.cmake
+         "include(CTestCoverageCollectGCOV)
+
+ctest_coverage_collect_gcov(TARBALL gcov-results.tar
+  SOURCE ${CMAKE_SOURCE_DIR}
+  BUILD ${CMAKE_BINARY_DIR}
+  GCOV_COMMAND /usr/bin/gcov)\n")
   endif()
 endif()
 
