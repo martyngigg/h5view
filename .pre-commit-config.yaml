@@ -9,7 +9,7 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 -   repo: https://github.com/martyngigg/pre-commit-clang-format
-    rev: 3ce14c8afebf6889e7c95c3920aab235782cde02
+    rev: daef541c33ebfc94532ce25327bdb1a10ad35787
     hooks:
     -   id: clang-format
 exclude:
