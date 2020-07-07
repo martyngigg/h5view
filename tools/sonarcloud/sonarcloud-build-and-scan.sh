@@ -38,10 +38,14 @@ conan install --no-imports ../
 cmake -G Ninja -DENABLE_TESTING=ON -DENABLE_COVERAGE=ON ${SRCDIR}
 BUILD_WRAPPER_OUTPUT_DIR=sonarcloud-scanner
 CCACHE_DISABLE=1 build-wrapper-linux-x86-64 --out-dir ${BUILD_WRAPPER_OUTPUT_DIR} cmake --build .
+ctest -j8
+${BUILDDIR}/pyvenv/bin/coverage xml
 
 # Run sonar scanner
 sonar-scanner \
+  -Dsonar.projectBaseDir=${SRCDIR} \
   -Dsonar.login=${SONAR_TOKEN} \
   -Dsonar.cfamily.build-wrapper-output=${BUILD_WRAPPER_OUTPUT_DIR} \
   -Dsonar.cfamily.gcov.reportsPath=${BUILDDIR} \
+  -Dsonar.python.coverage.reportPaths=${BUILDDIR} \
   -Dsonar.pullrequest.key=${PRID}
