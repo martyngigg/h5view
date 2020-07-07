@@ -14,7 +14,7 @@ foreach(
   endif()
 endforeach()
 
-project(h5view VERSION 0.1.0 LANGUAGES CXX)
+project(h5view LANGUAGES C CXX)
 
 # Project-cmake files
 set(h5view_CMAKE_DIR "${h5view_SOURCE_DIR}/cmake/Modules")
@@ -45,15 +45,24 @@ include(CompilerConfig)
 # ------------------------------------------------------------------------------
 # Dependencies
 # ------------------------------------------------------------------------------
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-  message(
-    FATAL_ERROR
-      "Unable to find ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake."
-      "Have you run 'conan install ...'?"
-  )
-endif()
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS KEEP_RPATHS)
+# Use conan for dependencies
+include(${h5view_SOURCE_DIR}/external/conan/conan.cmake)
+conan_check(VERSION 1.24.0 REQUIRED)
+# Add required remotes
+conan_add_remote(NAME bincrafters INDEX 1
+                 URL https://api.bintray.com/conan/bincrafters/public-conan)
+conan_add_remote(NAME ess-dmsc INDEX 2
+                 URL https://api.bintray.com/conan/ess-dmsc/conan)
+
+conan_cmake_run(CONANFILE conanfile.py
+                BASIC_SETUP CMAKE_TARGETS KEEP_RPATH NO_OUTPUT_DIRS
+                BUILD missing
+                PROFILE_AUTO ALL)
+
+# Find location of Python as we need the executable paths later on
+find_package(Python REQUIRED)
+# Ensure any uses of FindPythonInterp use the correct version
+set(Python_ADDITIONAL_VERSIONS ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
 
 # ------------------------------------------------------------------------------
 # Static checks

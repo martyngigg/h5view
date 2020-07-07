@@ -172,6 +172,12 @@ cython_debug/
 media
 static
 
+# Compile commands
+compile_commands.json
+
+# Clangd cache
+.clangd/*
+
 # mypy cache
 .mypy_cache
 
